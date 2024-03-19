@@ -1,0 +1,16 @@
+<html>
+    <head>
+        <div>
+            Chatrooms
+        </div>
+    </head>
+    <body>
+        {%for i in conv%}
+            <p>
+                <a href="{{i.get_absolute_url}}">
+                    {{i.name}}
+                </a>
+            </p>
+        {%endfor%}
+    </body>
+</html>

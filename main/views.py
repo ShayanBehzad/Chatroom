@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from .models import *
 # Create your views here.
 
@@ -8,8 +8,11 @@ def home(request):
 
 
 def chatroom(request, pk=None):
+    conversation = get_object_or_404(Conversation, id=pk)
     messages = Message.objects.filter(conv=pk)
-    if request.method == 'POST':
-        Message.objects.create()
+    print(request)
+    return render(request, 'chatroom.html', {'conv':conversation, 'messages':messages})
+
+
 
 # 'implementing Http section'
