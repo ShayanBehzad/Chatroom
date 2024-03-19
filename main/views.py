@@ -11,3 +11,5 @@ def chatroom(request, pk=None):
     messages = Message.objects.filter(conv=pk)
     if request.method == 'POST':
         Message.objects.create()
+
+# 'implementing Http section'
