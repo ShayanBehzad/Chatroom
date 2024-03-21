@@ -1,5 +1,29 @@
+{% load auth_extras %}
+
+
 <html>
     <head>
+        <div>
+
+            {% if user.is_authenticated %}
+            <p>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Log Out</button>
+                  </form>
+            </p>
+            {% else %}
+            <p>
+                <a href="{% url "registerpage" %}"> Register</a>
+            </p>
+            <p>
+                <a href="{% url "login" %}"> Login</a>
+            </p>
+    
+            {% endif %}
+
+
+        </div>
         <div>
             Chatrooms
         </div>
@@ -10,6 +34,23 @@
                 <a href="{{i.get_absolute_url}}">
                     {{i.name}}
                 </a>
+                {% if user|has_group:i.id %} 
+                {% comment %} {% if user in i.users %} {% endcomment %}
+                <form action="{% url 'leave' g_pk=i.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">leave</button>
+                  </form>
+                  <form action="{% url 'conversation_room' pk=i.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Open</button>
+                  </form>
+                {% else %}
+                <form action="{% url 'join' g_pk=i.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Join</button>
+                  </form>
+                {% endif %}
+  
             </p>
         {%endfor%}
     </body>

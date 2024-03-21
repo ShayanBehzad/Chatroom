@@ -4,7 +4,7 @@ from Chatroom import settings
 
 @shared_task(bind=True)
 def send_notification_mail(self, target_mail, message):
-    mail_subject = "Welcome on Board!"
+    mail_subject = "!دلام خوش اومدی!"
     send_mail(
         subject = mail_subject,
         message=message,
