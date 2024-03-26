@@ -30,3 +30,7 @@ def leave_chat(request, g_pk):
     return redirect('/')
 
 # 'implementing Http section'
+# git push -f -u origin main 
+
+# wsl
+# sudo service redis-server start

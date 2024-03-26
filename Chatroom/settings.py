@@ -33,8 +33,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'register',
     'channels',
+    'register',
     'main',
     'daphne',
     'django_celery_results',
@@ -74,9 +74,12 @@ TEMPLATES = [
     },
 ]
 
+# daphne -p 6379 Chatroom.asgi:application
+DEFAULT_WS_PORT = 6379
+
+
 # WSGI_APPLICATION = "Chatroom.wsgi.application"
 ASGI_APPLICATION = "Chatroom.asgi.application"
-
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
