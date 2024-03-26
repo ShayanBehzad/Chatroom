@@ -32,7 +32,7 @@
         {%for i in conv%}
             <p>
                 <a href="{{i.get_absolute_url}}">
-                    {{i.name}}
+                    {{i.title}}
                 </a>
                 {% if user|has_group:i.id %} 
                 {% comment %} {% if user in i.users %} {% endcomment %}

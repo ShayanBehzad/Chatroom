@@ -33,10 +33,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django_celery_results',
     'register',
-    'channels', 
+    'channels',
     'main',
+    'daphne',
+    'django_celery_results',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -73,7 +74,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "Chatroom.wsgi.application"
+# WSGI_APPLICATION = "Chatroom.wsgi.application"
 ASGI_APPLICATION = "Chatroom.asgi.application"
 
 
@@ -90,6 +91,18 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+# channels
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
+
+
 
 # CELERY SETTINGS
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
