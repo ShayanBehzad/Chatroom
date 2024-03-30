@@ -12,13 +12,9 @@
     </p>
 </head>
 <body>
-    {%for i in messages%}
-        <p>
-            {{i.sender}}:
-            {{i.content}}
-        </p>
-    {%endfor%}
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+
+    <textarea id="chat-log" cols="100" rows="20">{%for i in messages%}{{i.sender}}: {{i.content}}
+{%endfor%}</textarea><br>
     <input id="chat-message-input" type="text" size="100">
     <input id="chat-message-submit" type="button" value="Send">
     {{ conv.id|json_script:"pk" }}
@@ -33,10 +29,9 @@
         + roomName
         + '/'
     );
-
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        document.querySelector('#chat-log').value += (data.message + '\n');
+        document.querySelector('#chat-log').value += (data.sender + ': ' + data.message + '\n');
     };
 
     chatSocket.onclose = function(e) {
