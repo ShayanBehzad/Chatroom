@@ -1,4 +1,4 @@
-# completing Chatroom Web with Django - Celery - Redis - Channels
+# Chatroom WebSite with Django - Celery - Redis - Channels
 
  * [x] Set the register app with login-register-logout and sending welcome mail tec.
  * [x] Build a simple message sending system with websokecket protocol.
