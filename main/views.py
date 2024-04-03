@@ -1,5 +1,7 @@
+import re
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import *
+from .forms import *
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -28,6 +30,27 @@ def leave_chat(request, g_pk):
     conv = get_object_or_404(Conversation, id=g_pk)
     conv.users.remove(user_id)
     return redirect('/')
+
+@login_required
+def create_chat(request):
+    form = ChannelForm
+    if request.method == 'POST':
+        form = ChannelForm(request.POST)
+        if form.is_valid():
+            # form.data["owner"] = request.user
+            # print(form.data)
+            con = Conversation.objects.create(
+                title = form.cleaned_data['title'],
+                owner = request.user,
+            )
+            con.users.add(request.user)
+            con.save()
+            return redirect('/%s'%con.id)
+            
+    return render(request, 'chatform.html', {'form':form})
+
+
+
 
 # 'implementing Http section'
 # git push -f -u origin main 

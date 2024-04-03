@@ -5,6 +5,7 @@ from django.urls import reverse
 
 class Conversation(models.Model):
     title = models.CharField(max_length=50)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
     users = models.ManyToManyField(User)
     created_at = models.DateTimeField(auto_now_add=True)
 

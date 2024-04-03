@@ -9,6 +9,7 @@ class UserRoleMixin(models.Model):
         regex=r'^(0|0098|\+98)9(0[1-5]|[1 3]\d|2[0-2]|98)\d{7}$',
         message="Phone number must be entered in the format: '+989031234567'."
     )
+    connections = models.ManyToManyField('self')
     phone = models.CharField(validators=[phone_regex], max_length=17, blank=True, default='')
 
     

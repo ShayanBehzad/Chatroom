@@ -12,6 +12,9 @@
                     <button type="submit">Log Out</button>
                   </form>
             </p>
+            <p>
+                <a href="{% url "chatform" %}"> Create Channel</a>
+            </p>
             {% else %}
             <p>
                 <a href="{% url "registerpage" %}"> Register</a>
@@ -21,7 +24,6 @@
             </p>
     
             {% endif %}
-
 
         </div>
         <div>
