@@ -8,6 +8,7 @@ from django.http import Http404
 from .models import User
 from .tasks import send_notification_mail
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 
 

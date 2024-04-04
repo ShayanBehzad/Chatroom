@@ -24,12 +24,10 @@
                 <a class="btn btn-primary btn-lg" href="{% if user|is_contact:self %}{% url "remove_from_contacts" username=user.username %}{% else %}{% url "add_to_contacts" username=user.username %} {% endif %}" role="button">
                 {% if user|is_contact:self %}Remove {% else %}Add {% endif %}</a>
             </p>
-            {% if user|is_contact:self %}
-            
+            {{ user|pv_chat:self }}
             <p>
-                <a class="btn btn-primary btn-lg" href="" role="button">Chat</a>
+                <a class="btn btn-primary btn-lg" href="{% url "pv_room" pk=user|pv_chat:self %}" role="button">Chat</a>
             </p>
-            {% endif %}
         </div>
 
         

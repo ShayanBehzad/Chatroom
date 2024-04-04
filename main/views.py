@@ -2,6 +2,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+
 
 # Create your views here.
 
@@ -43,6 +45,15 @@ def create_chat(request):
             return redirect('/%s'%con.id)
             
     return render(request, 'chatform.html', {'form':form})
+
+
+@login_required
+def pv_chat(request, pk):
+    conversation = get_object_or_404(PvChat, id=pk)
+    messages = PVMessage.objects.filter(conv=pk)
+    return render(request, 'pvchatroom.html', {'conv':conversation, 'messages':messages})
+
+
 
 
 # 'implementing Http section'
