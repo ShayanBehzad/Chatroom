@@ -1,17 +1,12 @@
-<!-- chat/templates/chat/room.html -->
-<!DOCTYPE html>
-<html>
-<head>
+{% extends 'base.html' %}
+{% block content %}
+
     <meta charset="utf-8"/>
     <title>Chat Room</title>
-    <p>
-        <a href="{% url "home" %}"> Home</a>
-    </p>
+
     <p>
         {{ conv.name }}
     </p>
-</head>
-<body>
 
     <textarea id="chat-log" cols="100" rows="40">{%for i in messages%}{{i.sender}}: {{i.content}}
 {%endfor%}</textarea><br>
@@ -54,4 +49,4 @@
         messageInputDom.value = '';
     };
 </script>
-</html>
+{% endblock content %}

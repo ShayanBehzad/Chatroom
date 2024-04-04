@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from django.core.validators import MinValueValidator, RegexValidator
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
+from Chatroom.settings import STATIC_URL
 
 
 class UserRoleMixin(models.Model):
@@ -9,10 +11,11 @@ class UserRoleMixin(models.Model):
         regex=r'^(0|0098|\+98)9(0[1-5]|[1 3]\d|2[0-2]|98)\d{7}$',
         message="Phone number must be entered in the format: '+989031234567'."
     )
-    connections = models.ManyToManyField('self')
+    connections = models.ManyToManyField('self', blank=True)
     phone = models.CharField(validators=[phone_regex], max_length=17, blank=True, default='')
+    image = models.ImageField(upload_to='profiles', blank=True)
+    bio = models.CharField(max_length=150, blank=True)
 
-    
     class Meta:
         abstract = True
 
@@ -33,3 +36,11 @@ class User(UserRoleMixin, AbstractUser):
         related_name='custom_user_set',  # Add a related_name argument
         related_query_name='custom_user',
     )
+
+    def get_absolute_url(self):
+        return reverse("profileview", kwargs={"username": self.username})
+    
+# class ProfileImage(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     image = models.ImageField(upload_to='profiles', blank=True)
+#     created_at = models.DateTimeField(auto_now_add=True)

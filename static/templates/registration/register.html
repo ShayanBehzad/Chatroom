@@ -1,8 +1,26 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
 {% block content %}
 
-{% comment %} action="{% url 'register' %}" {% endcomment %}
-<form  method="POST" autocomplete="off">
+<head>
+    <p>
+        <a class="btn btn-primary btn-lg" href="{% url "home" %}" role="button">Home</a>
+    </p>
+
+</head>
+ <body>
+<form  method="POST" enctype="multipart/form-data" autocomplete="off">
     {% csrf_token %}
+
+    <div class="field">
+        <label for="{{ form.image.id_for_label }}" class="label">
+            Image:
+        </label>
+        <div class="control">
+            {{ form.image|add_class:"input" }}
+        </div>
+        <p class="help is-danger">{{ form.image.errors }}</p>
+    </div>
  
     <div class="field">
         <label for="{{ form.username.id_for_label }}" class="label">
@@ -62,5 +80,6 @@
         </div>
     </div>
  </form>
+</body>
  
 {% endblock content %}

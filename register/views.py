@@ -8,6 +8,7 @@ from django.http import Http404
 from .models import User
 from .tasks import send_notification_mail
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
 
 
 @csrf_exempt
@@ -17,12 +18,12 @@ def register(request):
         return render(request, 'registration/register.html', {'form': forms})
     
     if request.method == 'POST':
-        forms = Registerform(request.POST)
-
+        forms = Registerform(request.POST, request.FILES)
         if forms.is_valid():
             # save the info
             mail = forms.cleaned_data['email']
             name = forms.cleaned_data['username']
+            print(forms.cleaned_data)
             # send Welcome email to the user
             send_notification_mail.delay(mail, 'Dear %s Welcome To Shashan Chatroom' %name)
             user = forms.save(commit=False)
@@ -30,10 +31,34 @@ def register(request):
             user.save()
             messages.success(request, 'You successfuly registerd.')
             login(request, user)
-            print(user.id)
             request.session['id'] = user.id
             return redirect('home')
 
         else:
             print(forms.errors)
-            raise Http404 
+            raise Http404(forms.errors)
+
+
+
+@login_required
+def profileview(request, username):
+    user = get_object_or_404(User, username=username)
+    return render(request, 'registration/profileview.html', {'user':user, 'self': request.user})
+
+
+@login_required
+def jcontact(request, username):
+    user = get_object_or_404(User, username=username)
+    req_user = request.user
+    req_user.connections.add(user)
+    req_user.save()
+    return redirect('profileview', username=username)
+
+@login_required
+def lcontact(request, username):
+    user = get_object_or_404(User, username=username)
+    req_user = request.user
+    req_user.connections.remove(user)
+    req_user.save()
+    return redirect('profileview', username=username)
+

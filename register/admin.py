@@ -6,6 +6,8 @@ from .models import User
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ['id', 'username']
+    filter_horizontal = ('connections',)
+
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)

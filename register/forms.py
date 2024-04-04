@@ -11,7 +11,7 @@ from register.models import User
 class Registerform(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'phone', 'password1', 'password2']
+        fields = ['image', 'username', 'email', 'phone', 'password1', 'password2']
 
 
 class Logginform(forms.ModelForm):
