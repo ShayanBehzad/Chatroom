@@ -10,19 +10,19 @@
                   </form>
             </p>
             <p>
-                <form action="{% url 'chatform' %}" method="post">
+                <form action="{% url 'chatform' %}" method="get">
                     {% csrf_token %}
                     <button type="submit">Create Chat</button>
                   </form>            </p>
             {% else %}
             <p>
-                <form action="{% url 'registerpage' %}" method="post">
+                <form action="{% url 'registerpage' %}" method="get">
                     {% csrf_token %}
                     <button type="submit">Register</button>
                   </form>
             </p>
             <p>
-                <form action="{% url 'login' %}" method="post">
+                <form action="{% url 'login' %}" method="get">
                     {% csrf_token %}
                     <button type="submit">Login</button>
                   </form>

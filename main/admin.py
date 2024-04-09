@@ -11,3 +11,5 @@ class ConversationAdmin(admin.ModelAdmin):
 admin.site.unregister(Conversation)
 admin.site.register(Conversation, ConversationAdmin)
 admin.site.register(Message)
+admin.site.register(PvChat)
+admin.site.register(PVMessage)

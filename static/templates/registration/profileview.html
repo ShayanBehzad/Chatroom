@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load auth_extras %}
+{% load static %}
 {% block content %}
 
 
@@ -13,7 +14,6 @@
             <i class="far fa-heart"></i>
         </div>
         <div class="profile">
-            {% load static %}    
             <img src="{% if user.image %}{% static 'media/' %}{{user.image}}{% else %}{% static "media/no_image.jpg" %}{% endif %}" class="thumbnail">
             <div class="check"><i class="fas fa-check"></i></div>
             <h3 class="name">{{user.username}}</h3>

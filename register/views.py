@@ -1,4 +1,4 @@
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
@@ -19,12 +19,13 @@ def register(request):
         return render(request, 'registration/register.html', {'form': forms})
     
     if request.method == 'POST':
+        print('eeeeeeeeeeeeeeeeeeeee')
         forms = Registerform(request.POST, request.FILES)
         if forms.is_valid():
             # save the info
             mail = forms.cleaned_data['email']
             name = forms.cleaned_data['username']
-            print(forms.cleaned_data)
+            print('the world is empty', forms.cleaned_data)
             # send Welcome email to the user
             send_notification_mail.delay(mail, 'Dear %s Welcome To Shashan Chatroom' %name)
             user = forms.save(commit=False)
@@ -44,6 +45,8 @@ def register(request):
 @login_required
 def profileview(request, username):
     user = get_object_or_404(User, username=username)
+    print('hhhhhhhhhhhhhhhhhhh',request)
+
     return render(request, 'registration/profileview.html', {'user':user, 'self': request.user})
 
 
@@ -53,7 +56,7 @@ def jcontact(request, username):
     req_user = request.user
     req_user.connections.add(user)
     req_user.save()
-    return redirect('profileview', username=username)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
 def lcontact(request, username):
@@ -61,5 +64,4 @@ def lcontact(request, username):
     req_user = request.user
     req_user.connections.remove(user)
     req_user.save()
-    return redirect('profileview', username=username)
-
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

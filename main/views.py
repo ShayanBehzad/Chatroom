@@ -51,7 +51,14 @@ def create_chat(request):
 def pv_chat(request, pk):
     conversation = get_object_or_404(PvChat, id=pk)
     messages = PVMessage.objects.filter(conv=pk)
-    return render(request, 'pvchatroom.html', {'conv':conversation, 'messages':messages})
+    count = messages.count()
+    if conversation.first_user == request.user:
+        second_user = conversation.second_user
+    else:
+        second_user = conversation.first_user
+    contacts = request.user.connections.all()
+    
+    return render(request, 'chatroom/pv.html', {'contacts':contacts, 'conv':conversation,'first_user':request.user, 'second_user':second_user, 'messages':messages, 'count':count})
 
 
 
