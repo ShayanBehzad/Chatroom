@@ -15,8 +15,8 @@
     {{ conv.id|json_script:"pk" }}
 </body>
 <script>
+    {% comment %} Connect to consumer {% endcomment %}
     const roomName = JSON.parse(document.getElementById('pk').textContent);
-
     const chatSocket = new WebSocket(
         'ws://'
         + window.location.host
@@ -24,6 +24,7 @@
         + roomName
         + '/'
     );
+    {% comment %} Recieve the message {% endcomment %}
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         document.querySelector('#chat-log').value += (data.sender + ': ' + data.message + '\n');
@@ -40,6 +41,7 @@
         }
     };
 
+    {% comment %} Send message to consumer {% endcomment %}
     document.querySelector('#chat-message-submit').onclick = function(e) {
         const messageInputDom = document.querySelector('#chat-message-input');
         const message = messageInputDom.value;
