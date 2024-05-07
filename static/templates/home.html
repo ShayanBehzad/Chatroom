@@ -13,7 +13,14 @@
                 <form action="{% url 'chatform' %}" method="get">
                     {% csrf_token %}
                     <button type="submit">Create Chat</button>
-                  </form>            </p>
+                  </form>
+            </p>
+            <p>
+              <form action="{% url 'contacts' username=user.username %}" method="get">
+                  {% csrf_token %}
+                  <button type="submit">Contacts</button>
+                </form>
+          </p>
             {% else %}
             <p>
                 <form action="{% url 'registerpage' %}" method="get">

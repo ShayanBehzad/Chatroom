@@ -6,7 +6,6 @@ from django.db.models import Q
 
 
 # Create your views here.
-
 def home(request):
     conversations = Conversation.objects.all()
     return render(request, 'home.html', {'conv':conversations})
@@ -60,6 +59,12 @@ def pv_chat(request, pk):
     
     return render(request, 'chatroom/pv.html', {'contacts':contacts, 'conv':conversation,'first_user':request.user, 'second_user':second_user, 'messages':messages, 'count':count})
 
+
+# get the list of contatcs
+@login_required
+def contacts(request, username):
+    contacts = get_object_or_404(User, id=request.user.id).connections.all()
+    return render(request, 'contacts/contacts.html', {'contacts': contacts})
 
 
 
