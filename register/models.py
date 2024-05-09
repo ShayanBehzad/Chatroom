@@ -15,7 +15,10 @@ class UserRoleMixin(models.Model):
     phone = models.CharField(validators=[phone_regex], max_length=17, blank=True, default='')
     image = models.ImageField(upload_to='profiles', blank=True)
     bio = models.CharField(max_length=150, blank=True)
-
+    
+    def get_absolute_url(self):
+        return reverse("profileview", kwargs={"username": self.username})
+    
     class Meta:
         abstract = True
 
@@ -25,7 +28,7 @@ class User(UserRoleMixin, AbstractUser):
         verbose_name=_('groups'),
         blank=True,
         help_text=_('The groups this user belongs to.'),
-        related_name='custom_user_set',  # Add a related_name argument
+        related_name='custom_user_set', 
         related_query_name='custom_user',
     )
     user_permissions = models.ManyToManyField(
@@ -33,14 +36,6 @@ class User(UserRoleMixin, AbstractUser):
         verbose_name=_('user permissions'),
         blank=True,
         help_text=_('Specific permissions for this user.'),
-        related_name='custom_user_set',  # Add a related_name argument
+        related_name='custom_user_set', 
         related_query_name='custom_user',
     )
-
-    def get_absolute_url(self):
-        return reverse("profileview", kwargs={"username": self.username})
-    
-# class ProfileImage(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     image = models.ImageField(upload_to='profiles', blank=True)
-#     created_at = models.DateTimeField(auto_now_add=True)

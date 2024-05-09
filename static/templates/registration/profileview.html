@@ -3,10 +3,10 @@
 {% load static %}
 {% block content %}
 
+    <p>
+        <a class="btn btn-primary btn-lg" href="{% url "contacts" username=user.username %}" role="button">Contacts</a>
+    </p>
 
-    <input id="slider" class="customSlider" type="checkbox">
-    <label for="slider"></label>
-    
     <div class="wrapper">
         <div class="top-icons">
             <i class="fas fa-long-arrow-alt-left"></i>

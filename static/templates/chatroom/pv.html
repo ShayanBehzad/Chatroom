@@ -132,7 +132,7 @@
 						</div>
 						<div class="card-body msg_card_body">
                             {% for mes in messages %}
-                                {% if mes|first_sent:first_user %}
+                                {% if mes|first_sent:second_user %}
                                 <div class="d-flex justify-content-start mb-4" >
                                     <div class="img_cont_msg">
                                         <img src="{% if second_user.image %}{% static 'media/' %}{{second_user.image}}{% else %}{% static "media/no_image.jpg" %}{% endif %}" class="rounded-circle user_img_msg">
@@ -154,6 +154,17 @@
                                 </div>
                                 {% endif %}
                             {% endfor %}
+                            {% comment %} 
+                            <div class="d-flex justify-content-start mb-4" >
+                                <div class="img_cont_msg">
+                                    <img src="{% if second_user.image %}{% static 'media/' %}{{second_user.image}}{% else %}{% static "media/no_image.jpg" %}{% endif %}" class="rounded-circle user_img_msg">
+                                </div>
+                                <div class="msg_cotainer">
+                                    {{mes.content}}
+                                    <span class="msg_time">{{mes.created_at}}</span>
+                                </div>
+                            </div> 
+                            {% endcomment %}
 							
 						<div class="card-footer">
 							<div class="input-group">
@@ -192,6 +203,7 @@
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         document.querySelector('#chat-log').value += (data.sender + ': ' + data.message + '\n');
+
     };
 
     chatSocket.onclose = function(e) {
