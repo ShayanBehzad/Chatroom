@@ -159,21 +159,10 @@
                             {% comment %}  {% endcomment %}
                             <div class="card-body msg_card_body" id="message_area">
                                 <section class="d-flex justify-content-start mb-4" >
-                                    <div class="msg_cotainer">
-                                        {{mes.content}}
-                                        <span class="msg_time">{{mes.created_at}}</span>
-                                    </div>
+                                
                                 </section>
                                 <section class="d-flex justify-content-end mb-4">
-                                    <div class="msg_cotainer_send">
-                                        {{mes.content}}
-                                        <span class="msg_time_send">{{mes.created_at}}</span>
-                                    </div>
-                                    {% comment %}
-                                     <div class="img_cont_msg">
-                                         <img src="{% if first_user.image %}{% static 'media/' %}{{first_user.image}}{% else %}{% static "media/no_image.jpg" %}{% endif %}" class="rounded-circle user_img_msg" class="rounded-circle user_img_msg">
-                                    </div>
-                                     {% endcomment %}
+                           
                                 </section>
 							
 						<div class="card-footer">
@@ -194,6 +183,8 @@
 	</body>
 </html>
 {{ conv.id|json_script:"pk" }}
+{{ user.id|json_script:"user" }}
+
 <script>
     $(document).ready(function(){
         $('#action_menu_btn').click(function(){
@@ -203,6 +194,7 @@
 
     {% comment %} Connect to consumer {% endcomment %}
     const roomName = JSON.parse(document.getElementById('pk').textContent);
+    const user_id = JSON.parse(document.getElementById('user').textContent);
     const chatSocket = new WebSocket(
         'ws://'
         + window.location.host
@@ -210,16 +202,22 @@
         + roomName
         + '/'
     );
-    {% comment %} Recieve the message {% endcomment %}
+
+    {% comment %}
+     1.Recieve the message 
+     2.if from another user, sent it to the text box
+    {% endcomment %}
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        message_area.insertAdjacentHTML("beforebegin",`<section class="d-flex justify-content-start mb-4" >
-            <div class="msg_cotainer">
-                ${data.message}
-                <span class="msg_time">12:50</span>
-            </div>
-        </section>`
-
+        if (data.sender_id != user_id){
+            message_area.insertAdjacentHTML("beforebegin",`<section class="d-flex justify-content-start mb-4" >
+                <div class="msg_cotainer">
+                    ${data.message}
+                    <span class="msg_time">12:50</span>
+                </div>
+            </section>`
+            );
+    }
     };
 
     chatSocket.onclose = function(e) {
@@ -235,8 +233,10 @@
         }
     };
 
-    {% comment %} 1.Send message to consumer {% endcomment %}
-    {% comment %} 2.Send the message to the text box {% endcomment %}
+    {% comment %}
+     1.Send message to consumer 
+     2.Send the message to the text box 
+    {% endcomment %}
     document.querySelector('#message_submit').onclick = function(e) {
 
         const messageInputDom = document.querySelector('#text_areas');

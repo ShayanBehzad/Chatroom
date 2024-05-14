@@ -2,7 +2,7 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from django.shortcuts import get_object_or_404
 from asgiref.sync import async_to_sync
-from main.models import Conversation, Message
+from main.models import Conversation, Message, PVMessage, PvChat
 
 
 
@@ -27,12 +27,20 @@ class PvChatCunsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
-        user = self.scope['user']
+        self.message = text_data_json["message"]
+        self.user = self.scope['user']
+        PM = PVMessage(conv=get_object_or_404(PvChat, id=self.room_name), sender=self.user, content=self.message)
+        PM.save()
+        print(self.message)
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name, {"type": "chat.message", "type_of_message":"new_message","message": self.message, "sender":str(self.user), 'sender_id':str(self.user.id)}
+        )
     
 
     def chat_message(self, event):
-        pass
+        # self.send(text_data=json.dumps({"message": self.message, 'type':'new_message', "sender":str(self.user), 'sender_id':str(self.user.id)}))
+        self.send(text_data=json.dumps(event))
+
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -66,8 +74,8 @@ class ChatConsumer(WebsocketConsumer):
         )
 
     # Receive message from room group
-    def chat_message(self, event):
-        message = event["message"]
-        user = event['sender']
+    def chat_message(self, the_data_that_will_come_from_the_layer):
+        message = the_data_that_will_come_from_the_layer["message"]
+        user = the_data_that_will_come_from_the_layer['sender']
         # Send message to WebSocket
         self.send(text_data=json.dumps({"message": message, "sender":str(user)}))
