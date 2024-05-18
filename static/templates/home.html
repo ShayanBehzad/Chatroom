@@ -21,6 +21,13 @@
                   <button type="submit">Contacts</button>
                 </form>
           </p>
+          
+          <p>
+            <form action="{% url 'profileview' username=user.username %}" method="get">
+                {% csrf_token %}
+                <button type="submit">Profile</button>
+              </form>
+          </p>
             {% else %}
             <p>
                 <form action="{% url 'registerpage' %}" method="get">

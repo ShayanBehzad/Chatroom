@@ -10,6 +10,7 @@ from .tasks import send_notification_mail
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from .forms import *
 
 
 @csrf_exempt
@@ -19,7 +20,6 @@ def register(request):
         return render(request, 'registration/register.html', {'form': forms})
     
     if request.method == 'POST':
-        print('eeeeeeeeeeeeeeeeeeeee')
         forms = Registerform(request.POST, request.FILES)
         if forms.is_valid():
             # save the info
@@ -45,9 +45,46 @@ def register(request):
 @login_required
 def profileview(request, username):
     user = get_object_or_404(User, username=username)
-    print('hhhhhhhhhhhhhhhhhhh',request)
+    emailform = EmailPhoneform(instance=user)
+    bioform = Bioform(instance=user)
+    usernameform = Usernameform(instance=user)
+    return render(request, 'registration/profileview.html', {'user':user, 'self': request.user, 'emailform':emailform, 'bioform':bioform, 'usernameform':usernameform})
 
-    return render(request, 'registration/profileview.html', {'user':user, 'self': request.user})
+@login_required
+def bioform(request, username):
+    user = get_object_or_404(User, username=username)
+    bioform = Bioform(instance=user)
+    if request.method == 'POST':
+        bioform = Bioform(request.POST, instance=user)
+        if bioform.is_valid():
+            bioform.save()
+    return redirect('profileview', username)
+
+@login_required
+def usernameform(request, username):
+    user = get_object_or_404(User, username=username)
+    usernameform = Usernameform(instance=user)
+    if request.method == 'POST':
+        usernameform = Usernameform(request.POST, instance=user)
+        if usernameform.is_valid():
+            username = usernameform.cleaned_data['username']
+            print(username)
+            usernameform.save()
+        else:
+            print(usernameform.errors)
+    return redirect('profileview', username)
+
+
+@login_required
+def emailphoneform(request, username):
+    user = get_object_or_404(User, username=username)
+    emailform = EmailPhoneform(instance=user)
+    if request.method == 'POST':
+        emailform = EmailPhoneform(request.POST, instance=user)
+        if emailform.is_valid():
+            emailform.save()
+    return redirect('profileview', username)
+
 
 
 @login_required

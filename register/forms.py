@@ -18,3 +18,26 @@ class Logginform(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'password']
+
+
+# profile edit forms
+
+class Imageform(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['image',]
+
+class Usernameform(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username',]
+
+class Bioform(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['bio',]
+
+class EmailPhoneform(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email', 'phone', ]

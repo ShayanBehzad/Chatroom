@@ -45,3 +45,10 @@ def first_sent(mes, first_user):
         return True
     else:
         return False
+    
+@register.filter(name='is_user')
+def is_user(user, self):
+    if user == self:
+        return True
+    else:
+        return False
