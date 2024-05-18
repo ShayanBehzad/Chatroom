@@ -2,6 +2,6 @@
 
  * [x] Set the register app with login-register-logout and sending welcome mail tec
  * [x] Build a simple message sending system with websokecket protocol
- * [ ] Build the channel form, PV chatroom and add user
+ * [x] Build PV chatroom, profile and the ability to add user to contacts
  * [ ] Adding features like 'is typing'
  * [ ] Front-End
