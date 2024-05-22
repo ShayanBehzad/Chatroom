@@ -48,12 +48,26 @@ def profileview(request, username):
     emailform = EmailPhoneform(instance=user)
     bioform = Bioform(instance=user)
     usernameform = Usernameform(instance=user)
-    return render(request, 'registration/profileview.html', {'user':user, 'self': request.user, 'emailform':emailform, 'bioform':bioform, 'usernameform':usernameform})
+    imageform = Imageform(instance=user)
+    return render(request, 'registration/profileview.html', {'user':user, 'self': request.user, 'emailform':emailform, 'bioform':bioform, 'imageform':imageform, 'usernameform':usernameform})
+
+
+@login_required
+def imageform(request, username):
+    user = get_object_or_404(User, username=username)
+    if request.method == 'POST':
+        imageform = Imageform(request.POST, request.FILES, instance=user)
+        print('hereeeee')
+        if imageform.is_valid():
+            print('hereeeee')
+            imageform.save()
+        else:
+            print(imageform.errors)
+    return redirect('profileview', username)
 
 @login_required
 def bioform(request, username):
     user = get_object_or_404(User, username=username)
-    bioform = Bioform(instance=user)
     if request.method == 'POST':
         bioform = Bioform(request.POST, instance=user)
         if bioform.is_valid():
@@ -63,7 +77,6 @@ def bioform(request, username):
 @login_required
 def usernameform(request, username):
     user = get_object_or_404(User, username=username)
-    usernameform = Usernameform(instance=user)
     if request.method == 'POST':
         usernameform = Usernameform(request.POST, instance=user)
         if usernameform.is_valid():
@@ -78,7 +91,6 @@ def usernameform(request, username):
 @login_required
 def emailphoneform(request, username):
     user = get_object_or_404(User, username=username)
-    emailform = EmailPhoneform(instance=user)
     if request.method == 'POST':
         emailform = EmailPhoneform(request.POST, instance=user)
         if emailform.is_valid():

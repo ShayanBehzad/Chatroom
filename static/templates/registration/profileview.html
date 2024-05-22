@@ -13,14 +13,58 @@
             <i class="far fa-heart"></i>
         </div>
         <div class="profile">
-            <img src="{% if user.image %}{% static 'media/' %}{{user.image}}{% else %}{% static "media/no_image.jpg" %}{% endif %}" class="thumbnail">
+            <div class="image-sec" style='justify-content: space-between;'>
+                <button class="image-button" onclick="openimageForm()">
+                    <p class="image">{% if user.image %}Change Image{% else %}Add Image{% endif %}</p>
+                </button>
+                <a href={% url "imageform" username=user.username %}  >
+                    <img src="{% if user.image %}{% static 'media/' %}{{user.image}}{% else %}{% static "media/no_image.jpg" %}{% endif %}" class="thumbnail">
+                </a>
+   
+            </div>
+
+
             <div class="check"><i class="fas fa-check"></i></div>
+          
+            <button class="open-button" onclick="openusernameForm()">
+                <p><h3 class="name">{{user.username}}</h3></p>
+            </button>
 
+            <button class="open-button" onclick="openbioForm()">
+                <br><p class="description">{% if user.bio %}{{user.bio}}{% else %}Bio{% endif %}</p>
+            </button>
 
+            <button class="open-button" onclick="openemailphoneForm()">
+                <p class="email">{% if user.email %}{{user.email}}{% else %}Email{% endif %}</p>
+                <p class="phone">{% if user.phone %}{{user.phone}}{% else %}None{% endif %}</p>
+            </button>
 
-            {% comment %} The pop-up hidden form {% endcomment %}
-            <p></p>
-            <div class="form-popup" id="emailform">
+            <p>
+                <a class="btn btn-primary btn-lg" href="{% url "contacts" username=user.username %}" role="button">Contacts</a>
+            </p>
+    
+        </div>
+
+    {% comment %} The pop-up hidden form {% endcomment %}
+
+    <div>
+        <div class="form-popup" id="imageform">
+            <form method="POST" enctype="multipart/form-data" action="{% url "imageform" username=user.username %}" class="form-container">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="{{ imageform.id_for_label }}" class="label"></label>
+                    <div class="control" >
+                        {{ imageform}}
+                    </div>
+                    <p class="help is-danger">{{ imageform.errors }}</p>
+                </div>
+                <button type="submit" class="btn">Save</button>
+                <button type="button" class="btn cancel" onclick="closeimageForm()">Close</button>
+            </form>
+        </div>
+
+    <div>
+        <div class="form-popup" id="emailform">
             <form method="POST" action="{% url "emailphoneform" username=user.username %}" class="form-container">
                 {% csrf_token %}
                 <div class="field">
@@ -33,57 +77,38 @@
                 <button type="submit" class="btn">Save</button>
                 <button type="button" class="btn cancel" onclick="closeemailphoneForm()">Close</button>
             </form>
-            </div>
-
-            <div class="form-popup" id="bioform">
-                <form method="POST" action="{% url "bioform" username=user.username %}" class="form-container">
-                    {% csrf_token %}
-                    <div class="field">
-                        <label for="{{ bioform.id_for_label }}" class="label"></label>
-                        <div class="control" >
-                            {{ bioform}}
-                        </div>
-                        <p class="help is-danger">{{ bioform.errors }}</p>
-                    </div>
-                    <button type="submit" class="btn">Save</button>
-                    <button type="button" class="btn cancel" onclick="closebioForm()">Close</button>
-                </form>
-                </div>
-
-                <div class="form-popup" id="usernameform">
-                    <form method="POST" action="{% url "usernameform" username=user.username %}" class="form-container">
-                        {% csrf_token %}
-                        <div class="field">
-                            <label for="{{ usernameform.id_for_label }}" class="label"></label>
-                            <div class="control" >
-                                {{ usernameform}}
-                            </div>
-                            <p class="help is-danger">{{ usernameform.errors }}</p>
-                        </div>
-                        <button type="submit" class="btn">Save</button>
-                        <button type="button" class="btn cancel" onclick="closeusernameForm()">Close</button>
-                    </form>
-                    </div>
-
-            <p></p>
-            
-
-            <button class="open-button" onclick="openusernameForm()">
-                <p><h3 class="name">{{user.username}}</h3></p>
-            </button>
-            <button class="open-button" onclick="openbioForm()">
-                <br><p class="description">{% if user.bio %}{{user.bio}}{% else %}Bio{% endif %}</p>
-            </button>
-            <button class="open-button" onclick="openemailphoneForm()">
-                <p class="email">{% if user.email %}{{user.email}}{% else %}Email{% endif %}</p>
-                <p class="phone">{% if user.phone %}{{user.phone}}{% else %}None{% endif %}</p>
-            </button>
-
-            <p>
-                <a class="btn btn-primary btn-lg" href="{% url "contacts" username=user.username %}" role="button">Contacts</a>
-            </p>
-    
         </div>
+
+        <div class="form-popup" id="bioform">
+            <form method="POST" action="{% url "bioform" username=user.username %}" class="form-container">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="{{ bioform.id_for_label }}" class="label"></label>
+                    <div class="control" >
+                        {{ bioform}}
+                    </div>
+                    <p class="help is-danger">{{ bioform.errors }}</p>
+                </div>
+                <button type="submit" class="btn">Save</button>
+                <button type="button" class="btn cancel" onclick="closebioForm()">Close</button>
+            </form>
+        </div>
+
+        <div class="form-popup" id="usernameform">
+            <form method="POST" action="{% url "usernameform" username=user.username %}" class="form-container">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="{{ usernameform.id_for_label }}" class="label"></label>
+                    <div class="control" >
+                        {{ usernameform}}
+                    </div>
+                    <p class="help is-danger">{{ usernameform.errors }}</p>
+                </div>
+                <button type="submit" class="btn">Save</button>
+                <button type="button" class="btn cancel" onclick="closeusernameForm()">Close</button>
+            </form>
+        </div>
+    </div>
     </div>    
     </div>
     {% else %}
@@ -137,6 +162,13 @@
         }
     function closeusernameForm() {
         document.getElementById("usernameform").style.display = "none";
+        }
+
+    function openimageForm() {
+        document.getElementById("imageform").style.display = "block";
+        }
+    function closeimageForm() {
+        document.getElementById("imageform").style.display = "none";
         }
 </script>
 <style>

@@ -13,7 +13,7 @@ class UserRoleMixin(models.Model):
     )
     connections = models.ManyToManyField('self', blank=True)
     phone = models.CharField(validators=[phone_regex], max_length=17, blank=True, default='')
-    image = models.ImageField(upload_to='profiles', blank=True)
+    image = models.ImageField(upload_to='profiles/', blank=True)
     bio = models.CharField(max_length=150, blank=True)
     
     def get_absolute_url(self):
