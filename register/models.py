@@ -3,6 +3,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, RegexValidator
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+from Chatroom import settings
 from Chatroom.settings import STATIC_URL
 
 
@@ -39,3 +40,22 @@ class User(UserRoleMixin, AbstractUser):
         related_name='custom_user_set', 
         related_query_name='custom_user',
     )
+
+
+
+class ConnectionHistory(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    STATUS = (
+        ("online", "On-line"),
+        ("offline", "Off-line")
+    )
+    status = models.CharField(max_length=10, choices=STATUS, default="online")
+    first_login = models.DateTimeField(auto_now_add=True)
+    last_echo = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Connection History"
+        verbose_name_plural = "Connections History"  
+
+    def __str__(self):
+        return f"{self.user} connection status"

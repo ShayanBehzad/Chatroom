@@ -2,7 +2,8 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from django.shortcuts import get_object_or_404
 from asgiref.sync import async_to_sync
-from main.models import Conversation, Message, PVMessage, PvChat
+from main.models import *
+from register.models import *
 
 
 
@@ -11,19 +12,23 @@ class PvChatCunsumer(WebsocketConsumer):
         print(self.scope)
         self.room_name = self.scope["url_route"]["kwargs"]["pk"]
         self.room_group_name = f"chat_{self.room_name}"
-        
+        user = self.scope['user']
+
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name, self.channel_name
         )
-
         self.accept()
+        self.update_online_status(user, "online")    
 
     def disconnect(self, close_code):
+        user = self.scope['user']
         # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name, self.channel_name
         )
+        self.update_online_status(user, "offline")       
+
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -33,13 +38,20 @@ class PvChatCunsumer(WebsocketConsumer):
         PM.save()
         print(self.message)
         async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name, {"type": "chat.message", "type_of_message":"new_message","message": self.message, "sender":str(self.user), 'sender_id':str(self.user.id)}
+            self.room_group_name, 
+            {"type": "chat.message", "type_of_message":"new_message", "message": self.message, "sender":str(self.user), 'sender_id':str(self.user.id)}
         )
     
 
     def chat_message(self, event):
-        # self.send(text_data=json.dumps({"message": self.message, 'type':'new_message', "sender":str(self.user), 'sender_id':str(self.user.id)}))
         self.send(text_data=json.dumps(event))
+
+    
+    def update_online_status(self, user, status):
+        return ConnectionHistory.objects.filter(user=user,).update(status=status)
+
+
+
 
 
 

@@ -31,7 +31,7 @@
                     <div class="card-body contacts_body">
 						<ui class="contacts">
                         {% for contact in contacts %}
-                        <a href={{ contact.get_absolute_url }}>
+                        <a href={{ contact.get_absolute_url }} data-online-status="{{ contact.is_online }}">
                             <li class="active">
                                 <div class="d-flex bd-highlight">
                                     <div class="img_cont">
@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="user_info">
                                         <span>{{contact.username}}</span>
-                                        <p>{{contact.username}} is online</p>
+                                        <p>{{contact.username}} {{ contact.status }}</p>
                                     </div>
                                 </div>
                             </li>
@@ -60,7 +60,7 @@
 								</div>
 								<div class="user_info">
 									<span>{{second_user.username}}</span>
-									<p>Messages: {{count}}</p>
+									<p data-online-status="{{second_user.is_online}}">Messages: {{count}}</p>
 								</div>
 								<div class="video_cam">
 									<span><i class="fas fa-video"></i></span>
@@ -159,15 +159,30 @@
     {% endcomment %}
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        if (data.sender_id != user_id){
-            message_area.insertAdjacentHTML("beforebegin",`<section class="d-flex justify-content-start mb-4" >
-                <div class="msg_cotainer">
-                    ${data.message}
-                    <span class="msg_time">12:50</span>
-                </div>
-            </section>`
-            );
-    }
+        if (data.type === 'online_status') {
+            const userElement = document.querySelector(`[href="${data.user_id}"]`);
+            if (userElement) {
+                userElement.dataset.onlineStatus = data.is_online? 'online' : 'offline';
+            }
+    
+            const userInfoElement = document.querySelector(`[data-online-status]`);
+            if (userInfoElement) {
+                userInfoElement.textContent = `${userInfoElement.textContent.split(':')[0]} ${data.is_online? 'is online' : 'is offline'}`;
+            }
+
+
+
+        } else if (data.type === 'chat.message') {
+            if (data.sender_id != user_id){
+                message_area.insertAdjacentHTML("beforebegin",`<section class="d-flex justify-content-start mb-4" >
+                    <div class="msg_cotainer">
+                        ${data.message}
+                        <span class="msg_time">12:50</span>
+                    </div>
+                </section>`
+                );
+            }
+        }
     };
 
     chatSocket.onclose = function(e) {

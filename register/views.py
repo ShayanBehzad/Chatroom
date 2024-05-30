@@ -57,12 +57,12 @@ def imageform(request, username):
     user = get_object_or_404(User, username=username)
     if request.method == 'POST':
         imageform = Imageform(request.POST, request.FILES, instance=user)
-        print('hereeeee')
         if imageform.is_valid():
-            print('hereeeee')
             imageform.save()
+            messages.success(request, "Profile photo updated.")
         else:
             print(imageform.errors)
+            messages.error(request, "%s" %usernameform.errors)
     return redirect('profileview', username)
 
 @login_required
@@ -72,6 +72,8 @@ def bioform(request, username):
         bioform = Bioform(request.POST, instance=user)
         if bioform.is_valid():
             bioform.save()
+            messages.success(request, "Profile bio updated.")
+
     return redirect('profileview', username)
 
 @login_required
@@ -80,11 +82,13 @@ def usernameform(request, username):
     if request.method == 'POST':
         usernameform = Usernameform(request.POST, instance=user)
         if usernameform.is_valid():
-            username = usernameform.cleaned_data['username']
-            print(username)
             usernameform.save()
+            messages.success(request, "Username updated.")
+
         else:
             print(usernameform.errors)
+            messages.error(request, "%s" %usernameform.errors)
+
     return redirect('profileview', username)
 
 
@@ -95,6 +99,8 @@ def emailphoneform(request, username):
         emailform = EmailPhoneform(request.POST, instance=user)
         if emailform.is_valid():
             emailform.save()
+            messages.success(request, "Profile details updated.")
+
     return redirect('profileview', username)
 
 
