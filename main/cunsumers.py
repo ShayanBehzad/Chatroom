@@ -10,7 +10,6 @@ from register.models import *
 
 class PvChatCunsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        print(self.scope)
         self.room_name = self.scope["url_route"]["kwargs"]["pk"]
         self.room_group_name = f"chat_{self.room_name}"
         self.user = self.scope['user']
@@ -40,7 +39,6 @@ class PvChatCunsumer(AsyncWebsocketConsumer):
         self.message = text_data_json["message"]
         PM = PVMessage(conv=get_object_or_404(PvChat, id=self.room_name), sender=self.user, content=self.message)
         PM.save()
-        print(self.message)
         await self.channel_layer.group_send(
             self.room_group_name, 
             {"type": "chat.message", "type_of_message":"new_message", "message": self.message, "sender":str(self.user), 'sender_id':str(self.user.id)}
@@ -54,7 +52,6 @@ class PvChatCunsumer(AsyncWebsocketConsumer):
     async def send_onlineStatus(self, event):
         username = self.user.username
         online_status = self.status
-        print('kiiiiiiiiiiiiiii')
         await self.send(text_data=json.dumps({
             'type':'online-status',
             'username':username,

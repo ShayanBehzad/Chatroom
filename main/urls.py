@@ -7,5 +7,6 @@ urlpatterns = [
     path("l/<int:g_pk>", leave_chat, name='leave'),
     path("chatform/", create_chat, name='chatform'),
     path("<str:username>/contacts/", contacts, name='contacts'),
+    path("members", add_contatcs, name='members'),
     path("pv_room/<int:pk>", pv_chat, name='pv_room'),
 ]

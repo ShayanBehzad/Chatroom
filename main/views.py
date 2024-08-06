@@ -1,3 +1,5 @@
+from ctypes import memmove
+from multiprocessing import context
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import *
 from .forms import *
@@ -66,6 +68,12 @@ def contacts(request, username):
     contacts = get_object_or_404(User, id=request.user.id).connections.all()
     return render(request, 'contacts/contacts.html', {'contacts': contacts})
 
+@login_required
+def add_contatcs(request):
+    members = User.objects.exclude(username=request.user.username)
+    context={'members': members, 'self': request.user}
+    print(members)
+    return render(request, 'contacts/members.html', context)
 
 
 # 'implementing Http section'

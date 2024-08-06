@@ -26,8 +26,9 @@ def register(request):
             mail = forms.cleaned_data['email']
             name = forms.cleaned_data['username']
             print('the world is empty', forms.cleaned_data)
+            site = 'https://shayanbehzad.ir/#portfolio'
             # send Welcome email to the user
-            send_notification_mail.delay(mail, 'Dear %s Welcome To Shashan Chatroom' %name)
+            send_notification_mail.delay(mail, 'Dear %s You Just Registered To My Real-Time Chatroom.\n Feel free to play around. \n You can also see my other projects in: %s' %(name, site))
             user = forms.save(commit=False)
             user.username = user.username.lower()
             user.save()

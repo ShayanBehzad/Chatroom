@@ -43,15 +43,11 @@
                         </li>
                         {% endfor %}
                         {% comment %} add to contacts {% endcomment %}
-                        <li class="active">
-                            <a href={{contact.get_absolute_url}}>
+                        <li style='text-align: center;' class="active">
+                            <a href={% url "members" %}>
                             <div class="d-flex bd-highlight">
                                 <div class="img_cont">
-                                    <span class="online_icon">+</span>
-                                </div>
-                                <div class="user_info">
-                                    <span>Add New Contact</span>
-                                    <p>is online</p>
+                                    <i class="fas fa-users">Add New Contact <h1>+</h1></i>
                                 </div>
                             </div>
                         </a>
