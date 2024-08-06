@@ -1,75 +1,36 @@
 {% extends 'base.html' %}
 {% load auth_extras %}
 {% block content %}
-        <div>
-            {% if user.is_authenticated %}
-            <p>
-                <form action="{% url 'logout' %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit">Log Out</button>
-                  </form>
-            </p>
-            <p>
-                <form action="{% url 'chatform' %}" method="get">
-                    {% csrf_token %}
-                    <button type="submit">Create Chat</button>
-                  </form>
-            </p>
-            <p>
-              <form action="{% url 'contacts' username=user.username %}" method="get">
-                  {% csrf_token %}
-                  <button type="submit">Contacts</button>
-                </form>
-          </p>
-          
-          <p>
-            <form action="{% url 'profileview' username=user.username %}" method="get">
-                {% csrf_token %}
-                <button type="submit">Profile</button>
-              </form>
-          </p>
-            {% else %}
-            <p>
-                <form action="{% url 'registerpage' %}" method="get">
-                    {% csrf_token %}
-                    <button type="submit">Register</button>
-                  </form>
-            </p>
-            <p>
-                <form action="{% url 'login' %}" method="get">
-                    {% csrf_token %}
-                    <button type="submit">Login</button>
-                  </form>
-            </p>
-    
-            {% endif %}
+<div class="container">
 
-        </div>
-        <div>
-            Chatrooms
-        </div>
-        {%for i in conv%}
-            <p>
-                <a href="{{i.get_absolute_url}}">
-                    {{i.title}}
-                </a>
-                {% if user|has_group:i.id %} 
-                {% comment %} {% if user in i.users %} {% endcomment %}
-                <form action="{% url 'leave' g_pk=i.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit">leave</button>
-                  </form>
-                  <form action="{% url 'conversation_room' pk=i.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit">Open</button>
-                  </form>
-                {% else %}
-                <form action="{% url 'join' g_pk=i.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit">Join</button>
-                  </form>
-                {% endif %}
-  
-            </p>
-        {%endfor%}
+
+    <div class="chatrooms">
+        <h2>Chatrooms</h2>
+        {% for i in conv %}
+            <div class="chatroom">
+                <a href="{{i.get_absolute_url}}" class="chatroom-title">{{i.title}}</a>
+                <div class="chatroom-actions">
+                    {% if user|has_group:i.id %}
+                        <form action="{% url 'leave' g_pk=i.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger">Leave</button>
+                        </form>
+                        <form action="{% url 'conversation_room' pk=i.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-secondary">Open</button>
+                        </form>
+                    {% else %}
+                        <form action="{% url 'join' g_pk=i.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-primary">Join</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
+<style>
+
+</style>

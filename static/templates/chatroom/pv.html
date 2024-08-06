@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 {% load auth_extras %}
 {% load static %}    
 {% block content %}
@@ -31,7 +31,7 @@
                     <div class="card-body contacts_body">
 						<ui class="contacts">
                         {% for contact in contacts %}
-                        <a href={{ contact.get_absolute_url }} data-online-status="{{ contact.is_online }}">
+                        <a href="{% url 'pv_room' pk=contact|pv_chat:self %}" data-online-status="{{ contact.is_online }}">
                             <li class="active">
                                 <div class="d-flex bd-highlight">
                                     <div class="img_cont">
@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="user_info">
                                         <span>{{contact.username}}</span>
-                                        <p>{{contact.username}} {{ contact.status }}</p>
+                                        <p id="online-status-{{contact.id}}">{{contact.username}} {{ contact.status }}</p>
                                     </div>
                                 </div>
                             </li>
@@ -130,7 +130,7 @@
 				</div>
 			</div>
 		</div>
-	</body>
+	</body>    
 </html>
 {{ conv.id|json_script:"pk" }}
 {{ user.id|json_script:"user" }}
@@ -159,20 +159,17 @@
     {% endcomment %}
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        if (data.type === 'online_status') {
-            const userElement = document.querySelector(`[href="${data.user_id}"]`);
-            if (userElement) {
-                userElement.dataset.onlineStatus = data.is_online? 'online' : 'offline';
-            }
-    
-            const userInfoElement = document.querySelector(`[data-online-status]`);
-            if (userInfoElement) {
-                userInfoElement.textContent = `${userInfoElement.textContent.split(':')[0]} ${data.is_online? 'is online' : 'is offline'}`;
-            }
-
-
-
-        } else if (data.type === 'chat.message') {
+        if (data.type === 'online-status') {
+            if(data.username != loggedin_user){
+                var user_to_change = document.getElementById(`online-status-${data.user_id}`);
+                if(data.online_status){
+                    user_to_change.textContent = 'Online';
+                }else{
+                    user_to_change.textContent = 'Offline';
+                }
+            };
+        }
+        else if (data.type === 'chat.message') {
             if (data.sender_id != user_id){
                 message_area.insertAdjacentHTML("beforebegin",`<section class="d-flex justify-content-start mb-4" >
                     <div class="msg_cotainer">
@@ -249,10 +246,14 @@
         border-radius: 15px 15px 0 0 !important;
         border-bottom: 0 !important;
     }
- .card-footer{
-    border-radius: 0 0 15px 15px !important;
+    .card-footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-radius: 0 0 15px 15px !important;
         border-top: 0 !important;
-}
+    }
     .container{
         align-content: center;
     }

@@ -57,7 +57,7 @@ def pv_chat(request, pk):
         second_user = conversation.first_user
     contacts = request.user.connections.all()
     
-    return render(request, 'chatroom/pv.html', {'contacts':contacts, 'conv':conversation,'first_user':request.user, 'second_user':second_user, 'messages':messages, 'count':count})
+    return render(request, 'chatroom/pv.html', {'contacts':contacts,'self': request.user, 'conv':conversation,'first_user':request.user, 'second_user':second_user, 'messages':messages, 'count':count})
 
 
 # get the list of contatcs

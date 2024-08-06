@@ -1,43 +1,47 @@
 import json
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from django.shortcuts import get_object_or_404
 from asgiref.sync import async_to_sync
+from channels.db import database_sync_to_async
 from main.models import *
 from register.models import *
 
 
 
-class PvChatCunsumer(WebsocketConsumer):
-    def connect(self):
+class PvChatCunsumer(AsyncWebsocketConsumer):
+    async def connect(self):
         print(self.scope)
         self.room_name = self.scope["url_route"]["kwargs"]["pk"]
         self.room_group_name = f"chat_{self.room_name}"
-        user = self.scope['user']
+        self.user = self.scope['user']
+        self.status = 'online'
 
         # Join room group
-        async_to_sync(self.channel_layer.group_add)(
-            self.room_group_name, self.channel_name
+        await self.channel_layer.group_add(
+            self.room_group_name, 
+            self.channel_name
         )
-        self.accept()
-        self.update_online_status(user, "online")    
+    
+        await self.accept()
+        await self.update_online_status(self.user, "online")    
 
-    def disconnect(self, close_code):
+    async def disconnect(self, close_code):
         user = self.scope['user']
+        self.status = 'offline'
         # Leave room group
-        async_to_sync(self.channel_layer.group_discard)(
+        await self.channel_layer.group_discard(
             self.room_group_name, self.channel_name
         )
-        self.update_online_status(user, "offline")       
+        await self.update_online_status(user, "offline")       
 
 
-    def receive(self, text_data):
+    async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         self.message = text_data_json["message"]
-        self.user = self.scope['user']
         PM = PVMessage(conv=get_object_or_404(PvChat, id=self.room_name), sender=self.user, content=self.message)
         PM.save()
         print(self.message)
-        async_to_sync(self.channel_layer.group_send)(
+        await self.channel_layer.group_send(
             self.room_group_name, 
             {"type": "chat.message", "type_of_message":"new_message", "message": self.message, "sender":str(self.user), 'sender_id':str(self.user.id)}
         )
@@ -47,9 +51,21 @@ class PvChatCunsumer(WebsocketConsumer):
         self.send(text_data=json.dumps(event))
 
     
-    def update_online_status(self, user, status):
-        return ConnectionHistory.objects.filter(user=user,).update(status=status)
+    async def send_onlineStatus(self, event):
+        username = self.user.username
+        online_status = self.status
+        print('kiiiiiiiiiiiiiii')
+        await self.send(text_data=json.dumps({
+            'type':'online-status',
+            'username':username,
+            'online_status':online_status
+        }))
 
+
+    @database_sync_to_async
+    def update_online_status(self, user, status):
+        ConnectionHistory.objects.filter(user=user,).update(status=status)
+    
 
 
 
