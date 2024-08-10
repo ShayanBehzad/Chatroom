@@ -1,11 +1,10 @@
-from ctypes import memmove
-from multiprocessing import context
+
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import *
-from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-
+from django.contrib import messages
+from .models import *
+from .forms import *
 
 # Create your views here.
 def home(request):
@@ -44,6 +43,8 @@ def create_chat(request):
             con.users.add(request.user)
             con.save()
             return redirect('/%s'%con.id)
+        else:
+            messages.error(request, "%s" %form.errors)
             
     return render(request, 'chatform.html', {'form':form})
 

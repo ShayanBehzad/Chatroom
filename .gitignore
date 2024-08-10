@@ -108,7 +108,14 @@ env/
 venv/ 
 ENV/ 
 env.bak/ 
-venv.bak/ 
+venv.bak/
+
+
+# 
+staticfiles/
+Dockerfile
+docker-compose.yaml
+.dockerignore
 
 # mkdocs documentation 
 /site 

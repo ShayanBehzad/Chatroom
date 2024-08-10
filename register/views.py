@@ -2,23 +2,18 @@ from django.http import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
-from .forms import *
 from django.contrib.auth import login, logout
 from django.http import Http404
-from .models import User
 from .tasks import send_notification_mail
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .forms import *
+from .models import User
 
 
 @csrf_exempt
 def register(request):
-    if request.method == 'GET':
-        forms = Registerform
-        return render(request, 'registration/register.html', {'form': forms})
-    
     if request.method == 'POST':
         forms = Registerform(request.POST, request.FILES)
         if forms.is_valid():
@@ -38,8 +33,11 @@ def register(request):
             return redirect('home')
 
         else:
-            print(forms.errors)
-            raise Http404(forms.errors)
+            messages.error(request, "%s" %forms.errors)
+
+    forms = Registerform
+    return render(request, 'registration/register.html', {'form': forms})
+    
 
 
 
@@ -60,6 +58,7 @@ def imageform(request, username):
         imageform = Imageform(request.POST, request.FILES, instance=user)
         if imageform.is_valid():
             imageform.save()
+            
             messages.success(request, "Profile photo updated.")
         else:
             print(imageform.errors)
@@ -74,6 +73,8 @@ def bioform(request, username):
         if bioform.is_valid():
             bioform.save()
             messages.success(request, "Profile bio updated.")
+        else:
+            messages.error(request, "%s" %bioform.errors)
 
     return redirect('profileview', username)
 
@@ -87,7 +88,6 @@ def usernameform(request, username):
             messages.success(request, "Username updated.")
 
         else:
-            print(usernameform.errors)
             messages.error(request, "%s" %usernameform.errors)
 
     return redirect('profileview', username)
@@ -101,6 +101,8 @@ def emailphoneform(request, username):
         if emailform.is_valid():
             emailform.save()
             messages.success(request, "Profile details updated.")
+        else:
+            messages.error(request, "%s" %emailform.errors)
 
     return redirect('profileview', username)
 

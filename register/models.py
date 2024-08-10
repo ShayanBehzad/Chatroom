@@ -1,10 +1,9 @@
+from Chatroom import settings
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from django.core.validators import MinValueValidator, RegexValidator
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
-from Chatroom import settings
-from Chatroom.settings import STATIC_URL
 
 
 class UserRoleMixin(models.Model):

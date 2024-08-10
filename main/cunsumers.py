@@ -3,6 +3,9 @@ from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from django.shortcuts import get_object_or_404
 from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
+from asgiref.sync import sync_to_async
+from datetime import datetime
+import time
 from main.models import *
 from register.models import *
 
@@ -37,16 +40,24 @@ class PvChatCunsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         self.message = text_data_json["message"]
-        PM = PVMessage(conv=get_object_or_404(PvChat, id=self.room_name), sender=self.user, content=self.message)
-        PM.save()
+        chat = await sync_to_async(get_object_or_404)(PvChat, id=self.room_name)
+        PM = PVMessage(conv=chat, sender=self.user, content=self.message)
+        await sync_to_async(PM.save)()
+        # date = str(datetime.datetime.now())
+        # print(date)
+        # ttime = date.split()[1]
+        # ptime = ttime.split(':')[:2]
+        # kir = ':'.join(ptime)
+        now = datetime.now()
+        kir2 = now.strftime('%H:%M')
+        print(type(self.message))
         await self.channel_layer.group_send(
             self.room_group_name, 
-            {"type": "chat.message", "type_of_message":"new_message", "message": self.message, "sender":str(self.user), 'sender_id':str(self.user.id)}
+            {"type": "chat.message", "type_of_message":"new_message", "message": self.message,"time":kir2, "sender":str(self.user), 'sender_id':str(self.user.id)}
         )
-    
 
-    def chat_message(self, event):
-        self.send(text_data=json.dumps(event))
+    async def chat_message(self, event):
+        await self.send(text_data=json.dumps(event))
 
     
     async def send_onlineStatus(self, event):

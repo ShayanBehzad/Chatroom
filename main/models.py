@@ -1,6 +1,8 @@
 from django.db import models
 from register.models import User
 from django.urls import reverse
+from datetime import datetime
+
 
 
 class Conversation(models.Model):
@@ -46,4 +48,9 @@ class PVMessage(models.Model):
     content = models.TextField()
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+
+    def formatted_time(self):
+        # Format the time as HH:MM in 24-hour format
+        return self.created_at.strftime("%H:%M")
 

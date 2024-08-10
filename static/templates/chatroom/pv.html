@@ -21,12 +21,7 @@
 			<div class="row justify-content-center h-100">
 				<div class="col-md-4 col-xl-3 chat"><div class="card mb-sm-3 mb-md-0 contacts_card">
 					<div class="card-header">
-						<div class="input-group">
-							<input type="text" placeholder="Search..." name="" class="form-control search">
-							<div class="input-group-prepend">
-								<span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
-							</div>
-						</div>
+                        <div><h2>Chats</h2></div>
 					</div>
                     <div class="card-body contacts_body">
 						<ui class="contacts">
@@ -36,11 +31,11 @@
                                 <div class="d-flex bd-highlight">
                                     <div class="img_cont">
                                         <img src="{% if contact.image %}{% static 'media/' %}{{contact.image}}{% else %}{% static "media/no_image.jpg" %}{% endif %}" class="rounded-circle user_img">
-                                        <span class="online_icon"></span>
+                                        {% comment %} <span class="online_icon"></span> {% endcomment %}
                                     </div>
                                     <div class="user_info">
                                         <span>{{contact.username}}</span>
-                                        <p id="online-status-{{contact.id}}">{{contact.username}} {{ contact.status }}</p>
+                                        {% comment %} <p id="online-status-{{contact.id}}">{{contact.username}} {{ contact.status }}</p> {% endcomment %}
                                     </div>
                                 </div>
                             </li>
@@ -56,11 +51,11 @@
 							<div class="d-flex bd-highlight">
 								<div class="img_cont">
 									<img src="{% if second_user.image %}{% static 'media/' %}{{second_user.image}}{% else %}{% static "media/no_image.jpg" %}{% endif %}" class="rounded-circle user_img">
-									<span class="online_icon"></span>
+									{% comment %} <span class="online_icon"></span> {% endcomment %}
 								</div>
 								<div class="user_info">
 									<span>{{second_user.username}}</span>
-									<p data-online-status="{{second_user.is_online}}">Messages: {{count}}</p>
+									{% comment %} <p data-online-status="{{second_user.is_online}}">Messages: {{count}}</p> {% endcomment %}
 								</div>
 								<div class="video_cam">
 									<span><i class="fas fa-video"></i></span>
@@ -78,7 +73,7 @@
 								</ul>
 							</div>
 						</div>
-						<div class="card-body msg_card_body">
+						<div id='chat-log' class="card-body msg_card_body">
                             {% for mes in messages %}
                                 {% if mes|first_sent:second_user %}
                                 <div class="d-flex justify-content-start mb-4" >
@@ -89,14 +84,14 @@
                                      {% endcomment %}
                                     <div class="msg_cotainer">
                                         {{mes.content}}
-                                        <span class="msg_time">{{mes.created_at}}</span>
+                                        <span class="msg_time">{{mes.formatted_time}}</span>
                                     </div>
                                 </div>
                                 {% else %}
                                 <div class="d-flex justify-content-end mb-4">
                                     <div class="msg_cotainer_send">
                                         {{mes.content}}
-                                        <span class="msg_time_send">{{mes.created_at}}</span>
+                                        <span class="msg_time_send">{{mes.formatted_time}}</span>
                                     </div>
                                     {% comment %}
                                      <div class="img_cont_msg">
@@ -153,6 +148,11 @@
         + '/'
     );
 
+    const chatLog = document.querySelector('#chat-log');
+    
+    function scrollToBottom() {
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }
     {% comment %}
      1.Recieve the message 
      2.if from another user, sent it to the text box
@@ -174,12 +174,13 @@
                 message_area.insertAdjacentHTML("beforebegin",`<section class="d-flex justify-content-start mb-4" >
                     <div class="msg_cotainer">
                         ${data.message}
-                        <span class="msg_time">12:50</span>
+                        <span class="msg_time">${data.time}</span>
                     </div>
                 </section>`
                 );
             }
         }
+        scrollToBottom()
     };
 
     chatSocket.onclose = function(e) {
@@ -193,6 +194,7 @@
         if (e.key === 'Enter') {  // enter, return
             document.querySelector('#message_submit').click();
         }
+        scrollToBottom()
     };
 
     {% comment %}
@@ -203,6 +205,16 @@
 
         const messageInputDom = document.querySelector('#text_areas');
         const message = messageInputDom.value;
+        var d = new Date();
+        var hours = d.getHours();
+        var minutes = d.getMinutes();
+        
+        // Pad minutes with leading zero if needed
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        
+        // Combine hours and minutes
+        var formattedTime = hours + ':' + minutes;
+
         chatSocket.send(JSON.stringify({
             'message': message
         }));
@@ -210,11 +222,17 @@
         message_area.insertAdjacentHTML("beforebegin", `<section class="d-flex justify-content-end mb-4">
             <div class="msg_cotainer_send">
                 ${message}
-                <span class="msg_time_send">10:54</span>
+                <span class="msg_time_send">${formattedTime}</span>
             </div>
         </section>`
         );
+        scrollToBottom()
     };
+
+    window.onload = function() {
+        scrollToBottom();
+    };
+    
 </script>
 <style>
     body,html{

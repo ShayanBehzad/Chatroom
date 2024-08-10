@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from Chatroom import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -23,3 +24,7 @@ urlpatterns = [
     path("accounts/", include('register.urls')),
     path("accounts/", include("django.contrib.auth.urls")),
 ]
+# settings.py (add this at the bottom of the file)
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
