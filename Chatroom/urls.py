@@ -16,15 +16,32 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from Chatroom import settings
+from django.conf import settings
+
+
+
+admin.site.site_title = "Chatroom site admin (DEV)"
+admin.site.site_header = "Chatroom administration"
+admin.site.index_title = "Site administration"
+
+
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("", include('main.urls')),
-    path("accounts/", include('register.urls')),
-    path("accounts/", include("django.contrib.auth.urls")),
+    path("chatroom/admin/", admin.site.urls),
+    path("chatroom/", include('main.urls')),
+    path("chatroom/accounts/", include('register.urls')),
+    path("chatroom/accounts/", include("django.contrib.auth.urls")),
 ]
-# settings.py (add this at the bottom of the file)
+
+#if settings.FORCE_SCRIPT_NAME:
+#    print('kiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
+#    urlpatterns = [path(settings.FORCE_SCRIPT_NAME[1:], include((urlpatterns, 'chatroom')))] + urlpatterns
+#    print(urlpatterns)
+
+
+
+
 if settings.DEBUG:
     from django.conf.urls.static import static
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

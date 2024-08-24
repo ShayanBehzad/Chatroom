@@ -30,19 +30,14 @@
                             <a href={{contact.get_absolute_url}}>
                             <div class="d-flex bd-highlight">
                                 <div class="img_cont">
-                                    <img src="{% if contact.image %}/chatroom/media/{{contact.image}}{% else %}/chatroom/media/no_image.jpg{% endif %}" class="rounded-circle user_img">
-                                    {% comment %}
-				    <span class="online_icon"></span>
-				    {% endcomment %}
+                                    <img src="{% if contact.image %}{% static 'media/' %}{{contact.image}}{% else %}{% static "media/no_image.jpg" %}{% endif %}" class="rounded-circle user_img">
+                                    <span class="online_icon"></span>
                                 </div>
-				
                                 <div class="user_info">
                                     <span>{{contact.username}}</span>
-                  		{% comment %}
-				    <p>{{contact.username}} is online</p>
-                                {% endcomment %}
-				</div>
-				
+                                    {% comment %} if online {% endcomment %}
+                                    <p>{{contact.username}} is online</p>
+                                </div>
                             </div>
                         </a>
                         </li>

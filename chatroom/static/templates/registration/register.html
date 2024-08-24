@@ -3,7 +3,7 @@
 {% block content %}
 <title>Members</title>
 {% if messages %}
-    <ul style='color: red;' class="messages">
+    <ul class="messages">
         {% for message in messages %}
         <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}

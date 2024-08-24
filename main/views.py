@@ -22,13 +22,13 @@ def join_chat(request, g_pk):
     user_id = request.user.id
     conv = get_object_or_404(Conversation, id=g_pk)
     conv.users.add(user_id)
-    return redirect('/%s' %g_pk)
+    return redirect('conversation_room', pk=g_pk)
 
 def leave_chat(request, g_pk):
     user_id = request.user.id
     conv = get_object_or_404(Conversation, id=g_pk)
     conv.users.remove(user_id)
-    return redirect('/')
+    return redirect('home')
 
 @login_required
 def create_chat(request):
@@ -42,10 +42,10 @@ def create_chat(request):
             )
             con.users.add(request.user)
             con.save()
-            return redirect('/%s'%con.id)
+            return redirect('conversation_room', pk=con.id)
         else:
             messages.error(request, "%s" %form.errors)
-            
+
     return render(request, 'chatform.html', {'form':form})
 
 
@@ -59,7 +59,7 @@ def pv_chat(request, pk):
     else:
         second_user = conversation.first_user
     contacts = request.user.connections.all()
-    
+
     return render(request, 'chatroom/pv.html', {'contacts':contacts,'self': request.user, 'conv':conversation,'first_user':request.user, 'second_user':second_user, 'messages':messages, 'count':count})
 
 
@@ -73,7 +73,6 @@ def contacts(request, username):
 def add_contatcs(request):
     members = User.objects.exclude(username=request.user.username)
     context={'members': members, 'self': request.user}
-    print(members)
     return render(request, 'contacts/members.html', context)
 
 

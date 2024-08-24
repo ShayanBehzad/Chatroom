@@ -112,6 +112,9 @@ venv.bak/
 
 
 # 
+static/admin/
+media/
+chatroom/
 staticfiles/
 Dockerfile
 docker-compose.yaml

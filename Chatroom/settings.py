@@ -28,9 +28,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-kr&o2kgg)1am)xuqyi(9t$j!zhxh3vs38rd+#ixn)e^*^t-3@s"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['shayanbehzad.ir', 'www.shayanbehzad.ir']
+
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://shayanbehzad.ir',
+    'https://www.shayanbehzad.ir',
+]
+
 
 
 # Application definition
@@ -51,6 +59,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "main.url_middleware.UrlModifierMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -146,9 +155,9 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 DEFAULT_FROM_EMAIL = os.environ.get('EMAIL')
 
 
-
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL='/chatroom/accounts/login'
+LOGIN_REDIRECT_URL = "/chatroom"
+LOGOUT_REDIRECT_URL = "/chatroom"
 AUTH_USER_MODEL = "register.User"
 
 
@@ -187,7 +196,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-STATIC_URL = "staticfiles/"
+STATIC_URL = "/chatroom/staticfiles/"
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
@@ -196,11 +205,18 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
+MEDIA_URL = '/chatroom/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+FORCE_SCRIPT_NAME = '/chatroom'
+
+#SECURE_SSL_REDIRECT = True
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
+#SECURE_HSTS_SECONDS = 31536000

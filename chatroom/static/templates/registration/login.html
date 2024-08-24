@@ -2,7 +2,7 @@
 {% block content %}
 
 {% if messages %}
-    <ul style='color: red;' class="messages">
+    <ul class="messages">
         {% for message in messages %}
         <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
@@ -11,7 +11,6 @@
 
 {% load static %}
 <title>Login</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="shortcut icon" type="image/png" href="{% static 'media/favicon.png' %}" >
 <style>
@@ -68,11 +67,10 @@
         text-decoration: underline;
     }
     @media (max-width: 600px) {
-	    .footer-container {
-	            flex-direction: column;
-	            gap: 10px;
-	    }
-	
+    .footer-container {
+            flex-direction: column;
+            gap: 10px;
+    }
     }
   .login-container {
     max-width: 400px;

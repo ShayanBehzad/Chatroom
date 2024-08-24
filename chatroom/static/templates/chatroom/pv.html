@@ -30,7 +30,7 @@
                             <li class="active">
                                 <div class="d-flex bd-highlight">
                                     <div class="img_cont">
-                                        <img src="{% if contact.image %}/chatroom/media/{{contact.image}}{% else %}/chatroom/media/no_image.jpg{% endif %}" class="rounded-circle user_img">
+                                        <img src="{% if contact.image %}{% static 'media/' %}{{contact.image}}{% else %}{% static "media/no_image.jpg" %}{% endif %}" class="rounded-circle user_img">
                                         {% comment %} <span class="online_icon"></span> {% endcomment %}
                                     </div>
                                     <div class="user_info">
@@ -48,18 +48,20 @@
 				<div class="col-md-8 col-xl-6 chat">
 					<div class="card">
 						<div class="card-header msg_head">
-		                                <a href="{% url "profileview" username=second_user.username %}">
 							<div class="d-flex bd-highlight">
 								<div class="img_cont">
-									<img src="{% if second_user.image %}/chatroom/media/{{second_user.image}}{% else %}/chatroom/media/no_image.jpg{% endif %}" class="rounded-circle user_img">
+									<img src="{% if second_user.image %}{% static 'media/' %}{{second_user.image}}{% else %}{% static "media/no_image.jpg" %}{% endif %}" class="rounded-circle user_img">
 									{% comment %} <span class="online_icon"></span> {% endcomment %}
 								</div>
 								<div class="user_info">
 									<span>{{second_user.username}}</span>
 									{% comment %} <p data-online-status="{{second_user.is_online}}">Messages: {{count}}</p> {% endcomment %}
 								</div>
+								<div class="video_cam">
+									<span><i class="fas fa-video"></i></span>
+									<span><i class="fas fa-phone"></i></span>
+								</div>
 							</div>
-						</a>
 							<span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>
 							<div class="action_menu">
 								<ul>
@@ -93,7 +95,7 @@
                                     </div>
                                     {% comment %}
                                      <div class="img_cont_msg">
-                                        <img src="{% if first_user.image %}/chatroom/media/{{first_user.image}}{% else %}/chatroom/media/no_image.jpg{% endif %}" class="rounded-circle user_img_msg" class="rounded-circle user_img_msg">
+                                        <img src="{% if first_user.image %}{% static 'media/' %}{{first_user.image}}{% else %}{% static "media/no_image.jpg" %}{% endif %}" class="rounded-circle user_img_msg" class="rounded-circle user_img_msg">
                                     </div>
                                      {% endcomment %}
                                 </div>

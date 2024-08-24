@@ -17,7 +17,7 @@ class PvChatCunsumer(AsyncWebsocketConsumer):
         self.room_group_name = f"chat_{self.room_name}"
         self.user = self.scope['user']
         self.status = 'online'
-
+        print('connected')
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name, 
@@ -51,12 +51,14 @@ class PvChatCunsumer(AsyncWebsocketConsumer):
         now = datetime.now()
         kir2 = now.strftime('%H:%M')
         print(type(self.message))
+        print('received')
         await self.channel_layer.group_send(
             self.room_group_name, 
             {"type": "chat.message", "type_of_message":"new_message", "message": self.message,"time":kir2, "sender":str(self.user), 'sender_id':str(self.user.id)}
         )
 
     async def chat_message(self, event):
+        print('sent')
         await self.send(text_data=json.dumps(event))
 
     

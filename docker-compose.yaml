@@ -8,7 +8,8 @@ services:
     environment:
       POSTGRES_DB: chatroom
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: sh.bisto5
+      POSTGRES_PASSWORD: Sh.bisto5
+      TZ: 'Asia/Tehran'
 
   web:
     build: .
@@ -26,7 +27,7 @@ services:
       - db
       - redis
     environment:
-      - DATABASE_URL=postgres://postgres:sh.bisto5@db:5432/chatroom
+      - DATABASE_URL=postgres://postgres:Sh.bisto5@db:5432/chatroom
       - REDIS_URL=redis://redis:6379/0
       # - DJANGO_SETTINGS_MODULE=Chatroom.settings 
 
@@ -42,7 +43,7 @@ services:
   redis:
     image: redis:latest
     ports:
-      - "6379:6379"
+      - "6380:6379"
 
 volumes:
   postgres_data:

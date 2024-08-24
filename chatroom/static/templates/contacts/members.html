@@ -31,12 +31,12 @@
                             <a href={{member.get_absolute_url}}>
                             <div class="d-flex bd-highlight">
                                 <div class="img_cont">
-                                    <img src="{% if member.image %}/chatroom/media/{{member.image}}{% else %}/chatroom/media/no_image.jpg{% endif %}" class="rounded-circle user_img">
+                                    <img src="{% if member.image %}{% static 'media/' %}{{member.image}}{% else %}{% static "media/no_image.jpg" %}{% endif %}" class="rounded-circle user_img">
                                     <span class="online_icon"></span>
                                 </div>
                                 <div class="user_info">
                                     <span>{{member.username}}</span>
-                                    {% comment %}<p>{{member.username}} is online</p>{% endcomment %}
+                                    <p>{{member.username}} is online</p>
                                 </div>
                                 <div style='text-align: center;'><a href="{% if member|is_contact:self %}{% url "remove_from_contacts" username=member.username %}{% else %}{% url "add_to_contacts" username=member.username %} {% endif %}">
                                     {% if member|is_contact:self %}
