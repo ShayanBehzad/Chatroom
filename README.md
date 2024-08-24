@@ -1,6 +1,6 @@
 # Shayan's Chatroom
 
-A real-time chat application built with Django, Channels, WebSockets, JavaScript, Daphne, and Docker.
+Welcome to the **Chatroom** project! This application is a feature-rich chat platform built using Django, Django Channels, WebSocket, JavaScript, Daphne, and Docker. The project is designed to offer real-time messaging with a variety of features, including private and global chatrooms, user profile management, contact lists, and automatic email notifications.
 
 ## Table of Contents
 
