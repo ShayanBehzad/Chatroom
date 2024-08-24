@@ -20,15 +20,17 @@ To get started with this chat application:
 3. Create and apply database migrations: `python manage.py migrate`
 4. Start the development server: `python manage.py runserver`
 
+
 ## Features
 
-- Real-time chat functionality using WebSockets
-- Authentication system
-- Private and global chat rooms
-- User profiles for editing and visualizing information
-- Contact management system
-- Automatic email notifications on registration (using Redis and Celery)
-- Docker containerization for easy deployment
+- **User Authentication**: Secure user registration, login, and logout functionalities.
+- **Private Chatrooms**: Users can create and join private chatrooms for personal conversations.
+- **Global Chatroom**: A public chatroom where all registered users can communicate.
+- **Profile Section**: Users can view and edit their profile information.
+- **Contacts Management**: Users can add and manage contacts.
+- **Real-time Messaging**: Leveraging Django Channels and WebSockets for real-time message delivery.
+- **Email Notifications**: Automatic email sending upon registration, powered by Redis and Celery.
+- **Dockerized Setup**: The entire application is containerized using Docker for easy deployment and scalability.
 
 ## Installation
 
