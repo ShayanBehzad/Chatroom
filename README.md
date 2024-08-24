@@ -10,7 +10,6 @@ A real-time chat application built with Django, Channels, WebSockets, JavaScript
 4. [Usage](#usage)
 5. [Deployment](#deployment)
 6. [Contributing](#contributing)
-7. [License](#license)
 
 ## Getting Started
 
@@ -75,11 +74,8 @@ The application will be available at `http://www.shayanbehzad.ir/chatroom/` (ass
 
 Contributions are welcome! Please fork the repository and submit pull requests.
 
-## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-
-# Chatroom WebSite with Django - Celery - Redis - Channels
+# 
 
  * [x] Set the register app with login-register-logout and sending welcome mail tec
  * [x] Build a simple message sending system with websokecket protocol
