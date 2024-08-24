@@ -1,127 +1,83 @@
+# Shayan's Chatroom
 
+A real-time chat application built with Django, Channels, WebSockets, JavaScript, Daphne, and Docker.
 
-Memory updated
-Here's a suggested structure and content for your README file:
+## Table of Contents
 
-Chatroom Application
-This is a real-time chat application built using Django, Django Channels, WebSocket, JavaScript, and Daphne. The project features authentication, private and global chatrooms, a profile management section, contact management, and automated email notifications upon registration using Redis and Celery.
+1. [Getting Started](#getting-started)
+2. [Features](#features)
+3. [Installation](#installation)
+4. [Usage](#usage)
+5. [Deployment](#deployment)
+6. [Contributing](#contributing)
+7. [License](#license)
 
-Table of Contents
-Features
-Technologies Used
-Installation
-Configuration
-Usage
-Running the Application
-Project Structure
-Contributing
-License
-Features
-Authentication: Secure user registration and login system.
-Private Chatroom: Users can engage in one-on-one conversations.
-Global Chatroom: A public chatroom where all users can communicate.
-Profile Section: Users can view and edit their profiles.
-Contacts Management: Users can add and manage their contacts.
-Automated Emails: Registration confirmation emails are sent automatically using Redis and Celery.
-Technologies Used
-Backend: Django, Django Channels, Daphne, Redis, Celery
-Frontend: HTML, CSS, JavaScript
-Database: PostgreSQL
-WebSocket: Real-time communication with Django Channels and WebSocket
-Containerization: Docker (if applicable)
-Installation
-Clone the repository:
+## Getting Started
 
-bash
-Copy code
-git clone https://github.com/yourusername/chatroom.git
-cd chatroom
-Set up a virtual environment:
+To get started with this chat application:
 
-bash
-Copy code
-python3 -m venv venv
-source venv/bin/activate
-Install dependencies:
+1. Clone the repository: `git clone https://github.com/ShayanBehzad/Chatroom.git`
+2. Install dependencies: `pip install -r requirements.txt`
+3. Create and apply database migrations: `python manage.py migrate`
+4. Start the development server: `python manage.py runserver`
 
-bash
-Copy code
-pip install -r requirements.txt
-Set up PostgreSQL and Redis (skip if using Docker).
+## Features
 
-Apply migrations:
+- Real-time chat functionality using WebSockets
+- Authentication system
+- Private and global chat rooms
+- User profiles for editing and visualizing information
+- Contact management system
+- Automatic email notifications on registration (using Redis and Celery)
+- Docker containerization for easy deployment
 
-bash
-Copy code
-python manage.py migrate
-Create a superuser for admin access:
+## Installation
 
-bash
-Copy code
-python manage.py createsuperuser
-Configuration
-Update the .env file with your environment-specific settings, such as database credentials, secret keys, and email configurations.
+To install this application:
 
-Set up Redis for asynchronous task management and WebSocket channels.
+1. Install Django: `pip install django`
+2. Install Channels: `pip install channels`
+3. Install Daphne: `pip install daphne`
+4. Install Redis: `docker run -p 6379:6379 -d redis:latest` (or use your local Redis instance)
 
-Configure Celery for sending automated emails.
+## Usage
 
-(Optional) If using Docker, build and run the containers:
+### Authentication
 
-bash
-Copy code
-docker-compose up --build
-Usage
-Start the development server:
+- Users can register and log in to access chat features
+- The authentication system uses Django's built-in auth system
 
-bash
-Copy code
-python manage.py runserver
-Access the application at http://localhost:8000/.
+### Chat Rooms
 
-Register a new account, and an email will be sent automatically using Celery and Redis.
+- Private chat rooms: Users can create private rooms for specific conversations
+- Global chat room: A public space for all users
 
-Explore the private and global chatrooms, manage your profile, and add contacts.
+### User Profiles
 
-Running the Application
-Start the WebSocket server using Daphne:
+- Users can edit their profiles
+- Profile information is displayed on the chat interface
 
-bash
-Copy code
-daphne -p 8001 chatroom.asgi:application
-Ensure Redis and Celery are running for handling background tasks.
+### Contacts
 
-Run the Django server for serving HTTP requests:
+- Users can add contacts to their list
+- Contacts are displayed on the chat interface for quick access
 
-bash
-Copy code
-python manage.py runserver
-Project Structure
-arduino
-Copy code
-chatroom/
-├── chatroom/
-│   ├── __init__.py
-│   ├── settings.py
-│   ├── urls.py
-│   ├── asgi.py
-│   └── wsgi.py
-├── apps/
-│   ├── authentication/
-│   ├── chat/
-│   ├── profile/
-│   ├── contacts/
-│   └── email/
-├── static/
-│   ├── css/
-│   ├── js/
-│   └── images/
-├── templates/
-├── manage.py
-└── requirements.txt
-Contributing
-Contributions are welcome! Please fork this repository, create a new branch, and submit a pull request.
+### Email Notifications
 
+- New user registration triggers an automatic email notification
+- This feature is implemented using Redis and Celery
+
+## Deployment
+
+The application will be available at `http://www.shayanbehzad.ir/chatroom/` (assuming you're running on localhost).
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 # Chatroom WebSite with Django - Celery - Redis - Channels
 
