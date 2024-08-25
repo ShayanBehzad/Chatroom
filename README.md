@@ -69,7 +69,7 @@ To install this application:
 
 ## Deployment
 
-The application will be available at http://www.shayanbehzad.ir/chatroom/.
+The application is available at http://www.shayanbehzad.ir/chatroom/.
 
 ## Contributing
 
