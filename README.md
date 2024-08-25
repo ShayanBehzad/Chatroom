@@ -16,9 +16,8 @@ Welcome to the **Chatroom** project! This application is a feature-rich chat pla
 To get started with this chat application:
 
 1. Clone the repository: `git clone https://github.com/ShayanBehzad/Chatroom.git`
-2. Install dependencies: `pip install -r requirements.txt`
-3. Create and apply database migrations: `python manage.py migrate`
-4. Start the development server: `python manage.py runserver`
+2. Install dependencies: `docker-compose build`
+3. Start the development server: `docker-compose up -d`
 
 
 ## Features
@@ -70,7 +69,7 @@ To install this application:
 
 ## Deployment
 
-The application will be available at href=`http://www.shayanbehzad.ir/chatroom/` (assuming you're running on localhost).
+The application will be available at http://www.shayanbehzad.ir/chatroom/.
 
 ## Contributing
 
